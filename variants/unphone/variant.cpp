@@ -12,6 +12,4 @@ void initVariant() {
   for(int i = 0; i < 3; i++) {  // buzz a bit
     u.vibe(true);  delay(150); u.vibe(false); delay(150);
   }
-//u.printStore();               // print stored messages to Serial
-//Serial.flush();
 }
