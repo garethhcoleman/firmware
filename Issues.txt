@@ -1,26 +1,24 @@
 Issues:                                     File to start looking at?
-Fix need for serial monitor                 ??
 Use proper library for expander             main.cpp
-Get touchscreen working                     graphics/TFTDisplay.cpp
-Use power switch                            Power.cpp
-Battery level measurement                   Power.cpp
+Battery level measurement                   Power.cpp upstream LovyanGFX
 Utilise RGB led for notifications           modules/ExternalNotificationModule.cpp AmbientLightingThread.h
 Utilise Vibration for notifications         modules/ExternalNotificationModule.cpp
-Use accelerometer/compass                   Configuration.h, main.cpp, add library
 use IR leds                                 new code!
 
-adafruit/Adafruit LSM6DS@^4.7.2
-
-#include <Adafruit_LSM6DS3TRC.h> // adafruit library - simpler to implement at first
-// #include <LSM6DS3Sensor.h> // library from ST promises tap functions
+PRs
+Fix serial and introduce unPhone library
+Recognise TCA9555 during scan
+upstream LovyanGFX for VBAT on XPT2046
 
                 SCAN_SIMPLE_CASE(TCA9555_ADDR, TCA9555, "TCA9555 I2C expander found\n");
-                SCAN_SIMPLE_CASE(LSM6DS3_ADDR, LSM6DS3, "LSM6DS3 accelerometer found\n");
-
-                LSM6DS3,
-
 
 // -----------------------------------------------------------------------------
 // I2C EXPANDER
 // -----------------------------------------------------------------------------
 #define TCA9555_ADDR 0x24
+
+We have tidied up support for the unPhone, corrected the syntax for the XPT2046 _touch_instance and added a variantInit() method to reverse our previous changes to main.cpp.
+
+The unPhone library provides a number of useful features and brings power switch support for the unPhone out of the box.
+
+It also implements functions for the TCA9555 and BQ24295 which are used in the unPhone.
