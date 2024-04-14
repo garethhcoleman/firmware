@@ -34,7 +34,8 @@
 #define SCREEN_TRANSITION_FRAMERATE 5
 
 #define HAS_TOUCHSCREEN 1
-#define USE_XPT2046 1
+#define USE_XPT2046
+#define USE_XPT2046_VBAT
 #define TOUCH_CS 38
 
 #define HAS_GPS 0 // the unphone doesn't have a gps module

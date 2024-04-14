@@ -410,9 +410,8 @@ class LGFX : public lgfx::LGFX_Device
 {
     lgfx::Panel_HX8357D _panel_instance;
     lgfx::Bus_SPI _bus_instance;
-#if defined(USE_XPT2046)
-    lgfx::ITouch *_touch_instance;
-// lgfx::Touch_XPT2046 _touch_instance;
+#ifdef USE_XPT2046
+    lgfx::Touch_XPT2046 _touch_instance;
 #endif
 
   public:
@@ -463,11 +462,10 @@ class LGFX : public lgfx::LGFX_Device
 
             _panel_instance.config(cfg);
         }
-#if defined(USE_XPT2046)
+#ifdef USE_XPT2046
         {
             // Configure settings for touch control.
-            _touch_instance = new lgfx::Touch_XPT2046;
-            auto touch_cfg = _touch_instance->config();
+            auto touch_cfg = _touch_instance.config();
 
             touch_cfg.pin_cs = TOUCH_CS;
             touch_cfg.x_min = 0;
@@ -478,12 +476,27 @@ class LGFX : public lgfx::LGFX_Device
             touch_cfg.bus_shared = true;
             touch_cfg.offset_rotation = 1;
 
-            _touch_instance->config(touch_cfg);
-            //_panel_instance->setTouch(_touch_instance);
+            _touch_instance.config(touch_cfg);
+            _panel_instance.setTouch(&_touch_instance);
         }
 #endif
         setPanel(&_panel_instance);
     }
+#ifdef USE_XPT2046_VBAT
+    int16_t getTouchRegister(uint8_t reg) { return _touch_instance.readRegister(reg); }
+
+    float getVBat()
+    {
+        int16_t dummy = getTouchRegister(0xA7); // dummy measure, 1st is always noisy
+        delay(5);
+        int16_t data = getTouchRegister(0xA7) >> 3; // the real reading
+        dummy = getTouchRegister(0xA0);             // dummy measure power down
+        float vbat = data * 0.00234;
+        if (vbat <= 0.135)
+            vbat = 0.0; // 0.125V is the minimum
+        return vbat;
+    }
+#endif
 };
 
 static LGFX *tft = nullptr;
@@ -574,6 +587,7 @@ void TFTDisplay::sendCommand(uint8_t com)
         digitalWrite(VTFT_CTRL, LOW);
 #endif
 #ifdef UNPHONE
+        LOG_DEBUG("VBAT: %1.2fV\n", tft->getVBat());
         Wire.beginTransmission(0x26);
         Wire.write(0x02);
         Wire.write(0x04); // Backlight on
@@ -607,6 +621,7 @@ void TFTDisplay::sendCommand(uint8_t com)
         digitalWrite(VTFT_CTRL, HIGH);
 #endif
 #ifdef UNPHONE
+        LOG_DEBUG("VBAT: %1.2fV\n", tft->getVBat());
         Wire.beginTransmission(0x26);
         Wire.write(0x02);
         Wire.write(0x00); // Backlight off
