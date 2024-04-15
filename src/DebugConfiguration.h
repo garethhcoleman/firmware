@@ -53,22 +53,6 @@
 #endif
 #endif
 
-#ifdef UNPHONE
-#undef DEBUG_PORT
-#undef LOG_DEBUG
-#undef LOG_INFO
-#undef LOG_WARN
-#undef LOG_ERROR
-#undef LOG_CRIT
-#undef LOG_TRACE
-#define LOG_DEBUG(...) Serial.printf(__VA_ARGS__)
-#define LOG_INFO(...) Serial.printf(__VA_ARGS__)
-#define LOG_WARN(...) Serial.printf(__VA_ARGS__)
-#define LOG_ERROR(...) Serial.printf(__VA_ARGS__)
-#define LOG_CRIT(...) Serial.printf(__VA_ARGS__)
-#define LOG_TRACE(...) Serial.printf(__VA_ARGS__)
-#endif
-
 #define SYSLOG_NILVALUE "-"
 
 #define SYSLOG_CRIT 2  /* critical conditions */
