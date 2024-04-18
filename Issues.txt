@@ -1,24 +1,6 @@
 Issues:                                     File to start looking at?
-Use proper library for expander             main.cpp
 Battery level measurement                   Power.cpp upstream LovyanGFX
-Utilise RGB led for notifications           modules/ExternalNotificationModule.cpp AmbientLightingThread.h
-Utilise Vibration for notifications         modules/ExternalNotificationModule.cpp
 use IR leds                                 new code!
 
 PRs
-Fix serial and introduce unPhone library
-Recognise TCA9555 during scan
 upstream LovyanGFX for VBAT on XPT2046
-
-                SCAN_SIMPLE_CASE(TCA9555_ADDR, TCA9555, "TCA9555 I2C expander found\n");
-
-// -----------------------------------------------------------------------------
-// I2C EXPANDER
-// -----------------------------------------------------------------------------
-#define TCA9555_ADDR 0x24
-
-We have tidied up support for the unPhone, corrected the syntax for the XPT2046 _touch_instance and added a variantInit() method to reverse our previous changes to main.cpp.
-
-The unPhone library provides a number of useful features and brings power switch support for the unPhone out of the box.
-
-It also implements functions for the TCA9555 and BQ24295 which are used in the unPhone.
